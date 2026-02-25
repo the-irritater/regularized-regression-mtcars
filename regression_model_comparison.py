@@ -164,3 +164,45 @@ print(comparison)
 
 Lasso performs both shrinkage and feature selection. It completely eliminates several variables such as disp, drat, qsec, vs, am, gear, and carb, setting their coefficients to zero. Only wt (-2.49), cyl (-1.57), and hp (-0.64) remain significant in the Lasso model. This confirms that these three variables are the most important predictors of fuel efficiency when multicollinearity is considered.
 """
+
+import matplotlib.pyplot as plt
+
+# Model names
+models = ["OLS", "Ridge", "Lasso"]
+
+# Scores
+r2_scores = [0.7466, 0.8181, 0.7770]
+mse_scores = [10.1302, 7.2737, 8.9179]
+
+# Plot 1: R² Comparison
+plt.figure()
+plt.bar(models, r2_scores)
+plt.xlabel("Model")
+plt.ylabel("Test R²")
+plt.title("Model Comparison - Test R²")
+plt.ylim(0, 1)
+plt.show()
+
+# Plot 2: MSE Comparison
+plt.figure()
+plt.bar(models, mse_scores)
+plt.xlabel("Model")
+plt.ylabel("Test MSE")
+plt.title("Model Comparison - Test MSE")
+plt.show()
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Example feature names (adjust if needed)
+features = ["cyl", "disp", "hp", "drat", "wt", 
+            "qsec", "vs", "am", "gear", "carb"]
+
+# Replace with your actual lasso coefficients
+lasso_coefs = lasso_cv.coef_
+
+plt.figure()
+plt.barh(features, lasso_coefs)
+plt.xlabel("Coefficient Value")
+plt.title("Lasso Feature Importance")
+plt.show()
