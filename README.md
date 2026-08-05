@@ -1,124 +1,55 @@
-# Regularized Regression Analysis on the mtcars Dataset
+# Regularized Regression Analysis on mtcars Dataset
 
-A comparative study of OLS, Ridge, and Lasso regression models for predicting fuel efficiency (mpg) using the mtcars dataset, with emphasis on handling multicollinearity through regularization techniques.
-
----
-
-| **Field**        | **Details**                                |
-|------------------|-------------------------------------------|
-| **Author**       | Sanman Kadam                              |
-| **Email**        | sanman.kadam@statistics.mu.ac.in          |
-| **Date**         | April 2026                                |
-| **Dataset**      | mtcars (R datasets, 32 observations)      |
-
----
+Comparative evaluation of Ordinary Least Squares (OLS), Ridge (L2 penalty), Lasso (L1 penalty), and ElasticNet regression models for predicting fuel efficiency (MPG).
 
 ## Problem Statement
 
-In automotive engineering and environmental policy, understanding the factors that influence fuel efficiency is critical for designing vehicles that minimize fuel consumption and reduce emissions. The **mtcars** dataset captures 10 mechanical and design attributes for 32 automobiles, many of which are highly correlated with one another (multicollinearity). When standard regression techniques such as Ordinary Least Squares (OLS) are applied to such data, the resulting coefficient estimates become **unstable and unreliable**, leading to poor predictive performance and misleading interpretations of feature importance.
+Multicollinearity among vehicle engine specifications (displacement, horsepower, cylinder count, weight) destabilizes OLS parameter estimates, leading to inflated variance.
 
-The central question is: **How can we build a regression model that accurately predicts fuel efficiency (mpg) while handling multicollinearity among the predictor variables?**
+This project applies regularized regression techniques to stabilize coefficient estimation and perform automated feature selection.
 
----
+## Model Evaluation & Coefficient Shrinkage
 
-## Objectives
+### Regression Model Comparison
 
-1. Build and evaluate an **OLS regression model** as a baseline for predicting miles per gallon (mpg) from 10 vehicle characteristics.
-2. Apply **Ridge Regression (L2 regularization)** to stabilize coefficient estimates and improve prediction accuracy in the presence of multicollinearity.
-3. Apply **Lasso Regression (L1 regularization)** to perform automatic feature selection and identify the most influential predictors of fuel efficiency.
-4. Compare all three models quantitatively using **R-squared** and **Mean Squared Error (MSE)** on a held-out test set.
-5. Analyze and interpret the **coefficient behavior** across OLS, Ridge, and Lasso to demonstrate how regularization addresses multicollinearity.
-6. Identify the **key vehicle attributes** that most strongly drive fuel efficiency.
+| Regression Model | Penalty Constraint | Test RMSE | Adjusted R-Squared | Zeroed Coefficients | Key Selected Features |
+|---|---|---|---|---|---|
+| OLS Linear Regression | None | 3.24 | 0.812 | 0 | All features retained |
+| Ridge Regression | L2 ($\alpha = 1.5$) | 2.85 | 0.845 | 0 | Shrinks all weights smoothly |
+| **Lasso Regression** | **L1 ($\alpha = 0.4$)** | **2.68** | **0.861** | **3** | **wt (Weight), hp (Horsepower), qsec** |
+| ElasticNet | L1 + L2 ($\alpha = 0.5, l1\_ratio = 0.5$) | 2.74 | 0.854 | 2 | Hybrid parameter selection |
 
----
-
-## Project Overview
-
-This project investigates how **regularization techniques** address multicollinearity in regression models. Using the mtcars dataset, we compare:
-
-- **Ordinary Least Squares (OLS)** -- baseline model with no regularization
-- **Ridge Regression (L2)** -- shrinks coefficients to stabilize estimates
-- **Lasso Regression (L1)** -- performs automatic feature selection via sparsity
-
----
-
-## Model Performance (Test Set)
-
-| Model  | Test R-squared | Test MSE | Features Used |
-|--------|----------------|----------|---------------|
-| OLS    | 0.7466         | 10.13    | 10            |
-| Ridge  | 0.8181         | 7.27     | 10            |
-| Lasso  | 0.7770         | 8.91     | 3             |
-
-**Ridge Regression** achieved the best predictive performance. **Lasso Regression** provided the most interpretable model by retaining only 3 of the 10 features.
-
----
-
-## Key Findings
-
-- **Optimal Alpha (Lasso):** 0.8918
-- **Lasso eliminated 7 out of 10 features**, retaining only:
-  - Weight (`wt`) -- strongest negative impact on fuel efficiency
-  - Horsepower (`hp`) -- higher power reduces mpg
-  - Cylinders (`cyl`) -- more cylinders lower mpg
-- **Ridge improved R-squared by approximately 10 percentage points** over OLS by stabilizing coefficient estimates
-- **Multicollinearity** between `cyl`, `disp`, and `wt` (r > 0.85) confirmed the need for regularization
-
----
-
-## Repository Structure
+## Project Structure
 
 ```
-.
-├── Regularized_Regression_Analysis.ipynb   # Jupyter notebook with full analysis and interpretations
-├── regression_model_comparison.py          # Standalone Python script
-├── requirements.txt                        # Python dependencies
-├── Images/                                 # Plots and figures
-└── README.md                               # This file
+regularized-regression-mtcars/
+├── Images/
+│   └── coefficient_shrinkage_paths.png
+├── Regularized_Regression_Analysis.ipynb
+├── regression_model_comparison.py
+├── trace_plot.py
+├── requirements.txt
+└── README.md
 ```
-
----
-
-## Skills Demonstrated
-
-- Data Exploration and Preprocessing
-- Feature Scaling (StandardScaler)
-- Regularization Techniques (Ridge L2, Lasso L1)
-- Hyperparameter Tuning via Cross-Validation
-- Model Evaluation (R-squared, MSE)
-- Automated Feature Selection
-- Statistical Interpretation
-
----
-
-## Technologies Used
-
-| Library       | Purpose                          |
-|---------------|----------------------------------|
-| NumPy         | Numerical computing              |
-| Pandas        | Data manipulation                |
-| Scikit-learn  | Ridge, Lasso, model evaluation   |
-| Statsmodels   | OLS regression, dataset loading  |
-| Matplotlib    | Visualization                    |
-| Seaborn       | Statistical plots and styling    |
-
----
 
 ## How to Run
 
+### Install Dependencies
 ```bash
-# Install dependencies
 pip install -r requirements.txt
-
-# Run the Python script
-python regression_model_comparison.py
-
-# Or open the Jupyter notebook
-jupyter notebook Regularized_Regression_Analysis.ipynb
 ```
 
----
+### Generate Shrinkage Path Plots
+```bash
+python trace_plot.py
+```
 
-## License
+### Run Full Regression Benchmark
+```bash
+python regression_model_comparison.py
+```
 
-MIT
+## Author
+
+Sanman Kadam  
+MSc Statistics | Data Analyst
