@@ -7,7 +7,7 @@ predicting fuel efficiency (mpg) with emphasis on handling
 multicollinearity through regularization techniques.
 
 Problem Statement
------------------
+-
 The mtcars dataset contains 10 mechanical and design attributes for 32
 automobiles, many of which are highly correlated (multicollinearity).
 Standard OLS regression produces unstable and unreliable coefficient
@@ -17,7 +17,7 @@ regularization techniques can build more accurate and interpretable
 models for predicting fuel efficiency (mpg).
 
 Objectives
-----------
+-
 1. Build an OLS regression model as a baseline for predicting mpg.
 2. Apply Ridge Regression (L2) to stabilize coefficient estimates and
    improve prediction accuracy under multicollinearity.
@@ -33,9 +33,9 @@ Email  : sanman.kadam@statistics.mu.ac.in
 Date   : April 2026
 """
 
-# ---------------------------------------------------------------------------
+# -
 # Imports
-# ---------------------------------------------------------------------------
+# -
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -55,9 +55,9 @@ sns.set_style("white")
 plt.rcParams["figure.dpi"] = 100
 plt.rcParams["font.size"] = 11
 
-# ---------------------------------------------------------------------------
+# -
 # 1. Data Loading and Exploration
-# ---------------------------------------------------------------------------
+# -
 mtcars = sm.datasets.get_rdataset("mtcars", "datasets", cache=True).data
 df = pd.DataFrame(mtcars)
 
@@ -68,9 +68,9 @@ print(f"Shape: {df.shape}")
 print(f"\nMissing Values:\n{df.isnull().sum()}")
 print(f"\nDescriptive Statistics:\n{df.describe().round(2)}")
 
-# ---------------------------------------------------------------------------
+# -
 # 2. Correlation Analysis
-# ---------------------------------------------------------------------------
+# -
 plt.figure(figsize=(10, 7))
 corr_matrix = df.corr()
 sns.heatmap(
@@ -84,7 +84,7 @@ sns.heatmap(
     square=True,
     cbar_kws={"shrink": 0.8, "label": "Correlation Coefficient"},
 )
-plt.title("Correlation Heatmap -- mtcars Dataset", fontsize=14, fontweight="bold", pad=15)
+plt.title("Correlation Heatmap - mtcars Dataset", fontsize=14, fontweight="bold", pad=15)
 plt.tight_layout()
 plt.show()
 
@@ -97,9 +97,9 @@ plt.show()
 # - mpg vs cyl:   r ~ -0.85
 # This justifies the use of Ridge and Lasso regularization.
 
-# ---------------------------------------------------------------------------
+# -
 # 3. Data Preprocessing
-# ---------------------------------------------------------------------------
+# -
 features = df.columns[1:]  # All columns except 'mpg'
 target = df.columns[0]     # 'mpg'
 
@@ -118,9 +118,9 @@ print(f"\nTraining set: {X_train.shape[0]} samples")
 print(f"Test set:     {X_test.shape[0]} samples")
 print("Feature scaling applied (mean=0, std=1 on training set).")
 
-# ---------------------------------------------------------------------------
+# -
 # 4. Model Building
-# ---------------------------------------------------------------------------
+# -
 
 # 4.1 OLS Regression
 X_train_ols = sm.add_constant(X_train_scaled)
@@ -148,9 +148,9 @@ y_pred_lasso = lasso_cv.predict(X_test_scaled)
 
 print(f"Optimal Alpha (Lasso): {lasso_cv.alpha_:.4f}")
 
-# ---------------------------------------------------------------------------
+# -
 # 5. Model Comparison
-# ---------------------------------------------------------------------------
+# -
 results = pd.DataFrame(
     {
         "Model": ["OLS", "Ridge", "Lasso"],
@@ -171,7 +171,7 @@ results["Test R2"] = results["Test R2"].round(4)
 results["Test MSE"] = results["Test MSE"].round(4)
 
 print("\n" + "=" * 50)
-print("  MODEL COMPARISON -- TEST SET")
+print("  MODEL COMPARISON - TEST SET")
 print("=" * 50)
 print(results.to_string(index=False))
 print("=" * 50)
@@ -181,9 +181,9 @@ print("=" * 50)
 # Lasso improves upon OLS while using only 3 features.
 # OLS is weakest due to multicollinearity.
 
-# ---------------------------------------------------------------------------
+# -
 # 6. Lasso Feature Selection
-# ---------------------------------------------------------------------------
+# -
 lasso_coefs = pd.Series(lasso_cv.coef_, index=features)
 
 num_eliminated = np.sum(lasso_coefs == 0)
@@ -210,9 +210,9 @@ plt.show()
 # - hp  (horsepower): higher hp -> lower mpg
 # Redundant features (disp, carb) correlated with retained ones were dropped.
 
-# ---------------------------------------------------------------------------
+# -
 # 7. Coefficient Comparison
-# ---------------------------------------------------------------------------
+# -
 comparison = pd.DataFrame(
     {
         "OLS": ols_model.params[1:],  # Exclude intercept
@@ -257,9 +257,9 @@ plt.show()
 # Lasso performs shrinkage + selection: only wt, cyl, hp survive.
 #   All other coefficients are exactly zero.
 
-# ---------------------------------------------------------------------------
+# -
 # 8. Visual Performance Comparison
-# ---------------------------------------------------------------------------
+# -
 r2_scores = [
     r2_score(y_test, y_pred_ols),
     r2_score(y_test, y_pred_ridge),
@@ -278,7 +278,7 @@ fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 # R2 comparison
 bars1 = axes[0].bar(model_names, r2_scores, color=colors_palette, edgecolor="white", linewidth=1.5)
 axes[0].set_ylabel("Test R-squared", fontsize=12)
-axes[0].set_title("Model Comparison -- Test R2", fontsize=13, fontweight="bold")
+axes[0].set_title("Model Comparison - Test R2", fontsize=13, fontweight="bold")
 axes[0].set_ylim(0, 1)
 for bar, score in zip(bars1, r2_scores):
     axes[0].text(
@@ -296,7 +296,7 @@ axes[0].spines["right"].set_visible(False)
 # MSE comparison
 bars2 = axes[1].bar(model_names, mse_scores, color=colors_palette, edgecolor="white", linewidth=1.5)
 axes[1].set_ylabel("Test MSE", fontsize=12)
-axes[1].set_title("Model Comparison -- Test MSE", fontsize=13, fontweight="bold")
+axes[1].set_title("Model Comparison - Test MSE", fontsize=13, fontweight="bold")
 for bar, score in zip(bars2, mse_scores):
     axes[1].text(
         bar.get_x() + bar.get_width() / 2.0,
@@ -310,7 +310,7 @@ for bar, score in zip(bars2, mse_scores):
 axes[1].spines["top"].set_visible(False)
 axes[1].spines["right"].set_visible(False)
 
-plt.suptitle("Regularized Regression -- Performance Summary", fontsize=15, fontweight="bold", y=1.02)
+plt.suptitle("Regularized Regression - Performance Summary", fontsize=15, fontweight="bold", y=1.02)
 plt.tight_layout()
 plt.show()
 

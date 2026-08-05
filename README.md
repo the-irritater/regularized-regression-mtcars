@@ -13,7 +13,7 @@ This project applies regularized regression techniques to stabilize coefficient 
 ### Regression Model Comparison
 
 | Regression Model | Penalty Constraint | Test RMSE | Adjusted R-Squared | Zeroed Coefficients | Key Selected Features |
-|---|---|---|---|---|---|
+|-|-|-|-|-|-|
 | OLS Linear Regression | None | 3.24 | 0.812 | 0 | All features retained |
 | Ridge Regression | L2 ($\alpha = 1.5$) | 2.85 | 0.845 | 0 | Shrinks all weights smoothly |
 | **Lasso Regression** | **L1 ($\alpha = 0.4$)** | **2.68** | **0.861** | **3** | **wt (Weight), hp (Horsepower), qsec** |
